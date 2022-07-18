@@ -115,19 +115,19 @@ def create_record_window():
 
                         })
 
-        f_name.delete(0, END)
-        f_name.delete(0, END)
-        l_name.delete(0, END)
-        address.delete(0, END)
-        city.delete(0, END)
-        state.delete(0, END)
-        zip_code.delete(0, END)
-        phone_area.delete(0, END)
-        phone_prefix.delete(0, END)
-        phone_line.delete(0, END)
-        email.delete(0, END)
-        grade_point.delete(0, END)
-        grade_level.delete(0, END)
+        f_name.delete('all')
+        f_name.delete('all')
+        l_name.delete('all')
+        address.delete('all')
+        city.delete('all')
+        state.delete('all')
+        zip_code.delete('all')
+        phone_area.delete('all')
+        phone_prefix.delete('all')
+        phone_line.delete('all')
+        email.delete('all')
+        grade_point.delete('all')
+        grade_level.delete('all')
 
     # Submit Button
     submit_button = Button(top, text="Add Record to Database", command=submit)
@@ -139,8 +139,26 @@ def update_record_window():
 
 
 def search_record_window():
-
     def search_selection():
+        def delete_old_results():
+
+
+
+
+        def create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
+                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records):
+            oid_results = Label(top, text=oid_records).grid(row=9, column=0)
+            f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
+            l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
+            address_results = Label(top, text=address_records).grid(row=9, column=3)
+            city_results = Label(top, text=city_records).grid(row=9, column=4)
+            state_results = Label(top, text=state_records).grid(row=9, column=5)
+            zip_code_results = Label(top, text=zip_code_records).grid(row=9, column=6)
+            phone_results = Label(top, text=phone_records).grid(row=9, column=7)
+            email_results = Label(top, text=email_records).grid(row=9, column=8)
+            gpa_results = Label(top, text=gpa_records).grid(row=9, column=9)
+            grade_level_results = Label(top, text=grade_level_records).grid(row=9, column=10)
+
 
         def f_name_search():
             # Connect to DB
@@ -149,7 +167,8 @@ def search_record_window():
             cur = conn.cursor()
             # Search based on search_bar entry
             f_name_search_query = search_bar.get()
-            cur.execute("SELECT *,oid FROM student_records WHERE f_name=?", (f_name_search_query,))
+            # cur.execute("SELECT *,oid FROM student_records WHERE f_name= ?", (f_name_search_query,))
+            cur.execute("SELECT *,oid FROM student_records WHERE f_name LIKE" + "'%" + (f_name_search_query) + "%'")
             f_name_results = cur.fetchall()
 
             oid_records = ''
@@ -182,7 +201,7 @@ def search_record_window():
 
             phone_records = ''
             for result in f_name_results:
-                phone_records += str(result[6]) + str(result[7]) + str(result[8]) +"\n"
+                phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
 
             email_records = ''
             for result in f_name_results:
@@ -196,21 +215,8 @@ def search_record_window():
             for result in f_name_results:
                 grade_level_records += str(result[11]) + "\n"
 
-            # create results:
-                oid_results = Label(top, text=oid_records).grid(row=9, column=0)
-                f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
-                l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
-                address_results = Label(top, text=address_records).grid(row=9, column=3)
-                city_results = Label(top, text=city_records).grid(row=9, column=4)
-                state_results = Label(top, text=state_records).grid(row=9, column=5)
-                zip_code_results = Label(top, text=zip_code_records).grid(row=9, column=6)
-                phone_results = Label(top, text=phone_records).grid(row=9, column=7)
-                email_results = Label(top, text=email_records).grid(row=9, column=8)
-                gpa_results = Label(top, text=gpa_records).grid(row=9, column=9)
-                grade_level_results = Label(top, text=grade_level_records).grid(row=9, column=10)
-
-
-
+            create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
+                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
 
         def l_name_search():
             # Connect to DB
@@ -219,9 +225,8 @@ def search_record_window():
             cur = conn.cursor()
 
             l_name_search_query = search_bar.get()
-            cur.execute("SELECT *,oid FROM student_records WHERE l_name=?", (l_name_search_query,))
+            cur.execute("SELECT *,oid FROM student_records WHERE l_name LIKE" + "'%" + (l_name_search_query) + "%'")
             l_name_results = cur.fetchall()
-
 
             oid_records = ''
             for result in l_name_results:
@@ -267,17 +272,8 @@ def search_record_window():
             for result in l_name_results:
                 grade_level_records += str(result[11]) + "\n"
 
-            oid_results = Label(top, text=oid_records).grid(row=9, column=0)
-            f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
-            l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
-            address_results = Label(top, text=address_records).grid(row=9, column=3)
-            city_results = Label(top, text=city_records).grid(row=9, column=4)
-            state_results = Label(top, text=state_records).grid(row=9, column=5)
-            zip_code_results = Label(top, text=zip_code_records).grid(row=9, column=6)
-            phone_results = Label(top, text=phone_records).grid(row=9, column=7)
-            email_results = Label(top, text=email_records).grid(row=9, column=8)
-            gpa_results = Label(top, text=gpa_records).grid(row=9, column=9)
-            grade_level_results = Label(top, text=grade_level_records).grid(row=9, column=10)
+            create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
+                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
 
         def address_search():
             # Connect to DB
@@ -286,7 +282,7 @@ def search_record_window():
             cur = conn.cursor()
 
             address_search_query = search_bar.get()
-            cur.execute("SELECT *,oid FROM student_records WHERE address=?", (address_search_query,))
+            cur.execute("SELECT *,oid FROM student_records WHERE address LIKE" + "'%" + (address_search_query) + "%'")
             address_results = cur.fetchall()
 
             oid_records = ''
@@ -333,19 +329,9 @@ def search_record_window():
             for result in address_results:
                 grade_level_records += str(result[11]) + "\n"
 
-                # create results:
-                oid_results = Label(top, text=oid_records).grid(row=9, column=0)
-                f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
-                l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
-                address_results = Label(top, text=address_records).grid(row=9, column=3)
-                city_results = Label(top, text=city_records).grid(row=9, column=4)
-                state_results = Label(top, text=state_records).grid(row=9, column=5)
-                zip_code_results = Label(top, text=zip_code_records).grid(row=9, column=6)
-                phone_results = Label(top, text=phone_records).grid(row=9, column=7)
-                email_results = Label(top, text=email_records).grid(row=9, column=8)
-                gpa_results = Label(top, text=gpa_records).grid(row=9, column=9)
-                grade_level_results = Label(top, text=grade_level_records).grid(row=9, column=10)
-
+                create_results(oid_records, f_name_records, l_name_records, address_records, city_records,
+                               state_records, \
+                               zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
 
         def email_search():
             # Connect to DB
@@ -354,7 +340,7 @@ def search_record_window():
             cur = conn.cursor()
 
             email_search_query = search_bar.get()
-            cur.execute("SELECT *,oid FROM student_records WHERE email=?", (email_search_query,))
+            cur.execute("SELECT *,oid FROM student_records WHERE email LIKE" + "'%" + (email_search_query) + "%'")
             email_results = cur.fetchall()
 
             oid_records = ''
@@ -401,19 +387,8 @@ def search_record_window():
             for result in email_results:
                 grade_level_records += str(result[11]) + "\n"
 
-                # create results:
-                oid_results = Label(top, text=oid_records).grid(row=9, column=0)
-                f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
-                l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
-                address_results = Label(top, text=address_records).grid(row=9, column=3)
-                city_results = Label(top, text=city_records).grid(row=9, column=4)
-                state_results = Label(top, text=state_records).grid(row=9, column=5)
-                zip_code_results = Label(top, text=zip_code_records).grid(row=9, column=6)
-                phone_results = Label(top, text=phone_records).grid(row=9, column=7)
-                email_results = Label(top, text=email_records).grid(row=9, column=8)
-                gpa_results = Label(top, text=gpa_records).grid(row=9, column=9)
-                grade_level_results = Label(top, text=grade_level_records).grid(row=9, column=10)
-
+            create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
+                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
 
         def grade_level_search():
             # Connect to DB
@@ -422,7 +397,7 @@ def search_record_window():
             cur = conn.cursor()
 
             grade_level_search_query = search_bar.get()
-            cur.execute("SELECT *,oid FROM student_records WHERE grade_level=?", (grade_level_search_query,))
+            cur.execute("SELECT *,oid FROM student_records WHERE grade_level LIKE" + "'%" + (grade_level_search_query) + "%'")
             grade_level_results = cur.fetchall()
 
             oid_records = ''
@@ -469,19 +444,9 @@ def search_record_window():
             for result in grade_level_results:
                 grade_level_records += str(result[11]) + "\n"
 
-                # create results:
-                oid_results = Label(top, text=oid_records).grid(row=9, column=0)
-                f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
-                l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
-                address_results = Label(top, text=address_records).grid(row=9, column=3)
-                city_results = Label(top, text=city_records).grid(row=9, column=4)
-                state_results = Label(top, text=state_records).grid(row=9, column=5)
-                zip_code_results = Label(top, text=zip_code_records).grid(row=9, column=6)
-                phone_results = Label(top, text=phone_records).grid(row=9, column=7)
-                email_results = Label(top, text=email_records).grid(row=9, column=8)
-                gpa_results = Label(top, text=gpa_records).grid(row=9, column=9)
-                grade_level_results = Label(top, text=grade_level_records).grid(row=9, column=10)
-
+                create_results(oid_records, f_name_records, l_name_records, address_records, city_records,
+                               state_records, \
+                               zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
 
         drop_menu = drop_menu_selection.get()
         if drop_menu == "First Name":
@@ -500,14 +465,16 @@ def search_record_window():
     drop_menu_selection = StringVar()
     drop_menu_selection.set("Last Name")
 
-    search_by_label= Label(top, text="Search by: ").grid(row=1, column=0, sticky=W)
-    drop_menu = OptionMenu(top, drop_menu_selection, "First Name", "Last Name", "Address", "Email", "Grade Level")\
+    search_by_label = Label(top, text="Search by: ").grid(row=1, column=0, sticky=W)
+    drop_menu = OptionMenu(top, drop_menu_selection, "First Name", "Last Name", "Address", "Email", "Grade Level") \
         .grid(row=1, column=1, sticky=W)
-    search_bar = Entry(top, width=30)
+    search_bar = Entry(top, width=60)
     search_bar.grid(row=1, column=2, columnspan=10, sticky=W)
 
-    search_records = Button(top, text="Search Records", command=search_selection)\
-        .grid(row=1, column=4, columnspan=5)
+    search_records = Button(top, text="Search Records", command=search_selection) \
+        .grid(row=1, column=11)
+    closeBtn = Button(top, text="Close", padx=30, command=top.destroy)
+    closeBtn.grid(row=1, column=14)
 
     # Set results window:
     oid_head = Label(top, text="ID number").grid(row=8, column=0, sticky=W, padx=10)
