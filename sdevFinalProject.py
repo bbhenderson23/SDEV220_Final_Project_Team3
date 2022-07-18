@@ -3,10 +3,13 @@ import sqlite3
 
 root = Tk()
 root.title("Student Information System")
+root.geometry("1280x720")
 
 # Create or Connect to a DB. As written, creates a new db stored in memory for each run.
-# Commented out line below will create a db in the directory
+
 # conn = sqlite3.connect(':memory:')
+
+# Commented out line below will create a db in the directory
 conn = sqlite3.connect('SIS.db')
 
 # Create a cursor
@@ -88,8 +91,8 @@ def create_record_window():
 
     def submit():
         # Have to create a connection and cursor inside a function
-        # conn = sqlite3.connect(':memory:')  # for testing purposes. Uncomment next line when deployed
-        conn = sqlite3.connect('SIS.db')
+        conn = sqlite3.connect(':memory:')  # for testing purposes. Uncomment next line when deployed
+        # conn = sqlite3.connect('SIS.db')
         cur = conn.cursor()
 
         # Insert Entry data into db
@@ -128,7 +131,7 @@ def create_record_window():
 
     # Submit Button
     submit_button = Button(top, text="Add Record to Database", command=submit)
-    submit_button.grid(row=6, column=20, columnspan=3)
+    submit_button.grid(row=8, column=14, columnspan=3)
 
 
 def update_record_window():
@@ -136,8 +139,41 @@ def update_record_window():
 
 
 def search_record_window():
-    pass
+    # Start adam code
+    top = Toplevel()
+    # Text boxes
+    f_name = Entry(top, width=30)
+    f_name.grid(row=1, column=1, columnspan=10, sticky=W)
+    l_name = Entry(top, width=30)
+    l_name.grid(row=1, column=12, columnspan=10, sticky=W)
+    address = Entry(top, width=61)
+    address.grid(row=2, column=1, columnspan=40, sticky=W)
+    phone_area = Entry(top, width=3)
+    phone_area.grid(row=4, column=1, sticky=W)
+    phone_prefix = Entry(top, width=3)
+    phone_prefix.grid(row=4, column=2, sticky=W)
+    phone_line = Entry(top, width=7)
+    phone_line.grid(row=4, column=3, sticky=W)
+    email = Entry(top, width=30)
+    email.grid(row=5, column=1, sticky=W, columnspan=10)
+    grade_level = Entry(top, width=5)
+    grade_level.grid(row=6, column=3, sticky=W)
 
+    # Textbox labels
+    f_name_label = Label(top, text="First Name")
+    f_name_label.grid(row=1, column=0)
+    l_name_label = Label(top, text="Last Name")
+    l_name_label.grid(row=1, column=11)
+    address_label = Label(top, text="Street Address")
+    address_label.grid(row=2, column=0)
+    phone_label = Label(top, text="Phone Number")
+    phone_label.grid(row=4, column=0)
+    email_label = Label(top, text="Email")
+    email_label.grid(row=5, column=0)
+    grade_level_label = Label(top, text="Grade Level")
+    grade_level_label.grid(row=6, column=2)
+
+    
 
 create_btn = Button(root, text="Create a New Record", command=create_record_window)
 create_btn.grid(row=3, column=1, pady=20)
@@ -149,3 +185,4 @@ quitBtn = Button(root, text="Quit", padx=30, command=root.destroy)
 quitBtn.grid(row=21, column=3)
 
 root.mainloop()
+
