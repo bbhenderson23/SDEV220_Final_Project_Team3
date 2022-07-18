@@ -139,14 +139,12 @@ def update_record_window():
 
 
 def search_record_window():
-#PUT SEARCH BAR HERE
 
     def search_selection():
 
         def f_name_search():
-            # Commented out line below will create a db in the directory
+            # Connect to DB
             conn = sqlite3.connect('SIS.db')
-
             # Create a cursor
             cur = conn.cursor()
 
@@ -154,33 +152,24 @@ def search_record_window():
             cur.execute("SELECT * FROM student_records WHERE f_name=?", (f_name_search_query,))
             f_name_results = cur.fetchall()
             results_label = Label(top, text=f_name_results).grid(row=25, column=5)
-            print(f_name_results)
+
 
         def l_name_search():
-            # Commented out line below will create a db in the directory
+            # Connect to DB
             conn = sqlite3.connect('SIS.db')
-
             # Create a cursor
             cur = conn.cursor()
 
-
             l_name_search_query = search_bar.get()
-            print("l_name_search_query = ", l_name_search_query)
             cur.execute("SELECT * FROM student_records WHERE l_name=?", (l_name_search_query,))
             l_name_results = cur.fetchall()
             results_label = Label(top, text=l_name_results).grid(row=25, column=5)
-            print(l_name_results)
-            cur.execute("SELECT * FROM student_records")
-            all_records = cur.fetchall()
-            print(all_records)
 
         def address_search():
-            # Commented out line below will create a db in the directory
+            # Connect to DB
             conn = sqlite3.connect('SIS.db')
-
             # Create a cursor
             cur = conn.cursor()
-
 
             address_search_query = search_bar.get()
             cur.execute("SELECT * FROM student_records WHERE address=?", (address_search_query,))
@@ -188,12 +177,10 @@ def search_record_window():
             results_label = Label(top, text=address_results).grid(row=25, column=5)
 
         def email_search():
-            # Commented out line below will create a db in the directory
+            # Connect to DB
             conn = sqlite3.connect('SIS.db')
-
             # Create a cursor
             cur = conn.cursor()
-
 
             email_search_query = search_bar.get()
             cur.execute("SELECT * FROM student_records WHERE email=?", (email_search_query,))
@@ -201,11 +188,11 @@ def search_record_window():
             results_label = Label(top, text=email_results).grid(row=25, column=5)
 
         def grade_level_search():
-            # Commented out line below will create a db in the directory
+            # Connect to DB
             conn = sqlite3.connect('SIS.db')
-
             # Create a cursor
             cur = conn.cursor()
+
             grade_level_search_query = search_bar.get()
             cur.execute("SELECT * FROM student_records WHERE grade_level=?", (grade_level_search_query,))
             grade_level_results = cur.fetchall()
