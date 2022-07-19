@@ -141,12 +141,50 @@ def update_record_window():
 def search_record_window():
     def search_selection():
         def delete_old_results():
+            pass
 
 
 
 
         def create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
                            zip_code_records, phone_records, email_records, gpa_records, grade_level_records):
+
+            oid_results = Label(top, text="                   ")
+            oid_results.grid(row=9, column=0)
+            f_name_results = Label(top, text="                   ")
+            f_name_results.grid(row=9, column=1)
+            l_name_results = Label(top, text="                   ")
+            l_name_results.grid(row=9, column=2)
+            address_results = Label(top, text="                   ")
+            address_results.grid(row=9, column=3)
+            city_results = Label(top, text="                   ")
+            city_results.grid(row=9, column=4)
+            state_results = Label(top, text="                   ")
+            state_results.grid(row=9, column=5)
+            zip_code_results = Label(top, text="                   ")
+            zip_code_results.grid(row=9, column=6)
+            phone_results = Label(top, text="                   ")
+            phone_results.grid(row=9, column=7)
+            email_results = Label(top, text="                   ")
+            email_results.grid(row=9, column=8)
+            gpa_results = Label(top, text="                   ")
+            gpa_results.grid(row=9, column=9)
+            grade_level_results = Label(top, text="                   ")
+            grade_level_results.grid(row=9, column=10)
+
+
+            oid_results.destroy()
+            f_name_results.destroy()
+            l_name_results.destroy()
+            address_results.destroy()
+            city_results.destroy()
+            state_results.destroy()
+            zip_code_results.destroy()
+            phone_results.destroy()
+            email_results.destroy()
+            gpa_results.destroy()
+            grade_level_results.destroy()
+
             oid_results = Label(top, text=oid_records).grid(row=9, column=0)
             f_name_results = Label(top, text=f_name_records).grid(row=9, column=1)
             l_name_results = Label(top, text=l_name_records).grid(row=9, column=2)
@@ -172,47 +210,28 @@ def search_record_window():
             f_name_results = cur.fetchall()
 
             oid_records = ''
+            f_name_records = ''
+            l_name_records = ''
+            address_records = ''
+            city_records = ''
+            state_records = ''
+            zip_code_records = ''
+            phone_records = ''
+            email_records = ''
+            gpa_records = ''
+            grade_level_records = ''
+
             for result in f_name_results:
                 oid_records += str(result[12]) + "\n"
-
-            f_name_records = ''
-            for result in f_name_results:
                 f_name_records += str(result[0]) + "\n"
-
-            l_name_records = ''
-            for result in f_name_results:
                 l_name_records += str(result[1]) + "\n"
-
-            address_records = ''
-            for result in f_name_results:
                 address_records += str(result[2]) + "\n"
-
-            city_records = ''
-            for result in f_name_results:
                 city_records += str(result[3]) + "\n"
-
-            state_records = ''
-            for result in f_name_results:
                 state_records += str(result[4]) + "\n"
-
-            zip_code_records = ''
-            for result in f_name_results:
                 zip_code_records += str(result[5]) + "\n"
-
-            phone_records = ''
-            for result in f_name_results:
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
-
-            email_records = ''
-            for result in f_name_results:
                 email_records += str(result[9]) + "\n"
-
-            gpa_records = ''
-            for result in f_name_results:
                 gpa_records += str(result[10]) + "\n"
-
-            grade_level_records = ''
-            for result in f_name_results:
                 grade_level_records += str(result[11]) + "\n"
 
             create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
@@ -229,47 +248,28 @@ def search_record_window():
             l_name_results = cur.fetchall()
 
             oid_records = ''
+            f_name_records = ''
+            l_name_records = ''
+            address_records = ''
+            city_records = ''
+            state_records = ''
+            zip_code_records = ''
+            phone_records = ''
+            email_records = ''
+            gpa_records = ''
+            grade_level_records = ''
+
             for result in l_name_results:
                 oid_records += str(result[12]) + "\n"
-
-            f_name_records = ''
-            for result in l_name_results:
                 f_name_records += str(result[0]) + "\n"
-
-            l_name_records = ''
-            for result in l_name_results:
                 l_name_records += str(result[1]) + "\n"
-
-            address_records = ''
-            for result in l_name_results:
                 address_records += str(result[2]) + "\n"
-
-            city_records = ''
-            for result in l_name_results:
                 city_records += str(result[3]) + "\n"
-
-            state_records = ''
-            for result in l_name_results:
                 state_records += str(result[4]) + "\n"
-
-            zip_code_records = ''
-            for result in l_name_results:
                 zip_code_records += str(result[5]) + "\n"
-
-            phone_records = ''
-            for result in l_name_results:
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
-
-            email_records = ''
-            for result in l_name_results:
                 email_records += str(result[9]) + "\n"
-
-            gpa_records = ''
-            for result in l_name_results:
                 gpa_records += str(result[10]) + "\n"
-
-            grade_level_records = ''
-            for result in l_name_results:
                 grade_level_records += str(result[11]) + "\n"
 
             create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
@@ -286,47 +286,28 @@ def search_record_window():
             address_results = cur.fetchall()
 
             oid_records = ''
+            f_name_records = ''
+            l_name_records = ''
+            address_records = ''
+            city_records = ''
+            state_records = ''
+            zip_code_records = ''
+            phone_records = ''
+            email_records = ''
+            gpa_records = ''
+            grade_level_records = ''
+
             for result in address_results:
                 oid_records += str(result[12]) + "\n"
-
-            f_name_records = ''
-            for result in address_results:
                 f_name_records += str(result[0]) + "\n"
-
-            l_name_records = ''
-            for result in address_results:
                 l_name_records += str(result[1]) + "\n"
-
-            address_records = ''
-            for result in address_results:
                 address_records += str(result[2]) + "\n"
-
-            city_records = ''
-            for result in address_results:
                 city_records += str(result[3]) + "\n"
-
-            state_records = ''
-            for result in address_results:
                 state_records += str(result[4]) + "\n"
-
-            zip_code_records = ''
-            for result in address_results:
                 zip_code_records += str(result[5]) + "\n"
-
-            phone_records = ''
-            for result in address_results:
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
-
-            email_records = ''
-            for result in address_results:
                 email_records += str(result[9]) + "\n"
-
-            gpa_records = ''
-            for result in address_results:
                 gpa_records += str(result[10]) + "\n"
-
-            grade_level_records = ''
-            for result in address_results:
                 grade_level_records += str(result[11]) + "\n"
 
                 create_results(oid_records, f_name_records, l_name_records, address_records, city_records,
@@ -344,47 +325,28 @@ def search_record_window():
             email_results = cur.fetchall()
 
             oid_records = ''
+            f_name_records = ''
+            l_name_records = ''
+            address_records = ''
+            city_records = ''
+            state_records = ''
+            zip_code_records = ''
+            phone_records = ''
+            email_records = ''
+            gpa_records = ''
+            grade_level_records = ''
+
             for result in email_results:
                 oid_records += str(result[12]) + "\n"
-
-            f_name_records = ''
-            for result in email_results:
                 f_name_records += str(result[0]) + "\n"
-
-            l_name_records = ''
-            for result in email_results:
                 l_name_records += str(result[1]) + "\n"
-
-            address_records = ''
-            for result in email_results:
                 address_records += str(result[2]) + "\n"
-
-            city_records = ''
-            for result in email_results:
                 city_records += str(result[3]) + "\n"
-
-            state_records = ''
-            for result in email_results:
                 state_records += str(result[4]) + "\n"
-
-            zip_code_records = ''
-            for result in email_results:
                 zip_code_records += str(result[5]) + "\n"
-
-            phone_records = ''
-            for result in email_results:
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
-
-            email_records = ''
-            for result in email_results:
                 email_records += str(result[9]) + "\n"
-
-            gpa_records = ''
-            for result in email_results:
                 gpa_records += str(result[10]) + "\n"
-
-            grade_level_records = ''
-            for result in email_results:
                 grade_level_records += str(result[11]) + "\n"
 
             create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records, \
@@ -401,47 +363,28 @@ def search_record_window():
             grade_level_results = cur.fetchall()
 
             oid_records = ''
+            f_name_records = ''
+            l_name_records = ''
+            address_records = ''
+            city_records = ''
+            state_records = ''
+            zip_code_records = ''
+            phone_records = ''
+            email_records = ''
+            gpa_records = ''
+            grade_level_records = ''
+
             for result in grade_level_results:
                 oid_records += str(result[12]) + "\n"
-
-            f_name_records = ''
-            for result in grade_level_results:
                 f_name_records += str(result[0]) + "\n"
-
-            l_name_records = ''
-            for result in grade_level_results:
                 l_name_records += str(result[1]) + "\n"
-
-            address_records = ''
-            for result in grade_level_results:
                 address_records += str(result[2]) + "\n"
-
-            city_records = ''
-            for result in grade_level_results:
                 city_records += str(result[3]) + "\n"
-
-            state_records = ''
-            for result in grade_level_results:
                 state_records += str(result[4]) + "\n"
-
-            zip_code_records = ''
-            for result in grade_level_results:
                 zip_code_records += str(result[5]) + "\n"
-
-            phone_records = ''
-            for result in grade_level_results:
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
-
-            email_records = ''
-            for result in grade_level_results:
                 email_records += str(result[9]) + "\n"
-
-            gpa_records = ''
-            for result in grade_level_results:
                 gpa_records += str(result[10]) + "\n"
-
-            grade_level_records = ''
-            for result in grade_level_results:
                 grade_level_records += str(result[11]) + "\n"
 
                 create_results(oid_records, f_name_records, l_name_records, address_records, city_records,
