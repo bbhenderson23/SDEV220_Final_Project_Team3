@@ -202,15 +202,14 @@ def update_record_window():
             i += 1
 
         for i in range(len(results)):
-            update_frame = Frame(master_frame)
+            update_frame = Frame(master_frame, highlightbackground="black", highlightthickness=2)
             update_frame.grid(row=i+8, columnspan=20, sticky=NW)
 
 
-
             f_name = Entry(update_frame, width=30)
-            f_name.grid(row=1, column=1, columnspan=10, sticky=W)
+            f_name.grid(row=1, column=3, columnspan=10, sticky=W)
             l_name = Entry(update_frame, width=30)
-            l_name.grid(row=1, column=12, columnspan=10, sticky=W)
+            l_name.grid(row=1, column=15, columnspan=10, sticky=W)
             address = Entry(update_frame, width=61)
             address.grid(row=2, column=1, columnspan=40, sticky=W)
             city = Entry(update_frame, width=30)
@@ -229,9 +228,9 @@ def update_record_window():
 
             # Textbox labels
             f_name_label = Label(update_frame, text="First Name")
-            f_name_label.grid(row=1, column=0)
+            f_name_label.grid(row=1, column=2)
             l_name_label = Label(update_frame, text="Last Name")
-            l_name_label.grid(row=1, column=11)
+            l_name_label.grid(row=1, column=14)
             address_label = Label(update_frame, text="Street Address")
             address_label.grid(row=2, column=0)
             city_label = Label(update_frame, text="City")
@@ -248,6 +247,10 @@ def update_record_window():
             grade_point_label.grid(row=6, column=0)
             grade_level_label = Label(update_frame, text="Grade Level")
             grade_level_label.grid(row=6, column=2)
+            oid_label = Label(update_frame, text="ID Number")
+            oid_label.grid(row=1, column=0, sticky=W)
+            oid = Label(update_frame, text=oid_records[i])
+            oid.grid(row=1, column=1, sticky=W)
 
             update_button = Button(update_frame, text="Update", command=update_records)
             update_button.grid(row=9, column=20)
