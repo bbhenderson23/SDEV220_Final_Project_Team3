@@ -133,14 +133,144 @@ def create_record_window():
 
 def update_record_window():
     # At bottom of this section, creates the update window
+    top = Tk()
+    top.title("Update Records")
+
+
+
+    # Create a frame
+    master_frame = Frame(top)
+    master_frame.grid(row=8, columnspan=20, sticky=NW)
+    scrollbar = Scrollbar(master_frame, orient=VERTICAL)
+    scrollbar.grid(row=0, column=50)
+
+
+    # Create the search bar and buttons
+    drop_menu_selection = StringVar()
+    drop_menu_selection.set("Last Name")
+    search_by_label = Label(top, text="Search by: ")
+    search_by_label.grid(row=1, column=0, sticky=W)
+    drop_menu = OptionMenu(top, drop_menu_selection, "First Name", "Last Name", "Address", "Email", "Grade Level")
+    drop_menu.config(width=10)
+    drop_menu.grid(row=1, column=1, sticky=W)
+    search_bar = Entry(top, width=60)
+    search_bar.grid(row=1, column=2, columnspan=10, sticky=W)
+    update_frame = Frame(master_frame)
+    update_frame.grid(row=8, columnspan=20, sticky=NW)
+
+    def clear_update_frame(master_frame):
+        # Clears the old results from the frame
+        for widgets in master_frame.winfo_children():
+            widgets.destroy()
+        master_frame = Frame(top)
+        master_frame.grid(row=8, columnspan=20, sticky=NW)
+
+
+
 
     def update_records():
         pass
 
+    def populate_records(results):
+
+        clear_update_frame(master_frame)
+        oid_records = []
+        f_name_records = []
+        l_name_records = []
+        address_records = []
+        city_records = []
+        state_records = []
+        zip_code_records = []
+        phone_records = []
+        email_records = []
+        gpa_records = []
+        grade_level_records = []
+
+        i = 0
+        for result in range(len(results)):
+            oid_records.append(str(results[i][12]))
+            f_name_records.append(str(results[i][0]))
+            l_name_records.append(str(results[i][1]))
+            address_records.append(str(results[i][2]))
+            city_records.append(str(results[i][3]))
+            state_records.append(str(results[i][4]))
+            zip_code_records.append(str(results[i][5]))
+            phone_records.append(str(results[i][6]) + str(results[i][7]) + str(results[i][8]))
+            email_records.append(str(results[i][9]))
+            gpa_records.append(str(results[i][10]))
+            grade_level_records.append(str(results[i][11]))
+            i += 1
+
+        for i in range(len(results)):
+            update_frame = Frame(master_frame)
+            update_frame.grid(row=i+8, columnspan=20, sticky=NW)
+
+
+
+            f_name = Entry(update_frame, width=30)
+            f_name.grid(row=1, column=1, columnspan=10, sticky=W)
+            l_name = Entry(update_frame, width=30)
+            l_name.grid(row=1, column=12, columnspan=10, sticky=W)
+            address = Entry(update_frame, width=61)
+            address.grid(row=2, column=1, columnspan=40, sticky=W)
+            city = Entry(update_frame, width=30)
+            city.grid(row=3, column=1, columnspan=10, sticky=W)
+            state = Entry(update_frame, width=5)
+            state.grid(row=3, column=12, columnspan=2, sticky=W)
+            zip_code = Entry(update_frame, width=10)
+            zip_code.grid(row=3, column=15, columnspan=5, sticky=W)
+            phone = Entry(update_frame, width=3)
+            email = Entry(update_frame, width=30)
+            email.grid(row=5, column=1, sticky=W, columnspan=10)
+            grade_point = Entry(update_frame, width=5)
+            grade_point.grid(row=6, column=1, sticky=W)
+            grade_level = Entry(update_frame, width=5)
+            grade_level.grid(row=6, column=3, sticky=W)
+
+            # Textbox labels
+            f_name_label = Label(update_frame, text="First Name")
+            f_name_label.grid(row=1, column=0)
+            l_name_label = Label(update_frame, text="Last Name")
+            l_name_label.grid(row=1, column=11)
+            address_label = Label(update_frame, text="Street Address")
+            address_label.grid(row=2, column=0)
+            city_label = Label(update_frame, text="City")
+            city_label.grid(row=3, column=0)
+            state_label = Label(update_frame, text="State")
+            state_label.grid(row=3, column=11)
+            zip_code_label = Label(update_frame, text="Zip code")
+            zip_code_label.grid(row=3, column=14)
+            phone_label = Label(update_frame, text="Phone Number")
+            phone_label.grid(row=4, column=0)
+            email_label = Label(update_frame, text="Email")
+            email_label.grid(row=5, column=0)
+            grade_point_label = Label(update_frame, text="GPA")
+            grade_point_label.grid(row=6, column=0)
+            grade_level_label = Label(update_frame, text="Grade Level")
+            grade_level_label.grid(row=6, column=2)
+
+            update_button = Button(update_frame, text="Update", command=update_records)
+            update_button.grid(row=9, column=20)
+            delete_btn = Button(update_frame, text="Delete Record", command=delete_record_confirm)
+            delete_btn.grid(row=10, column=20)
+
+            f_name.insert(0, f_name_records[i])
+            l_name.insert(0, l_name_records[i])
+            address.insert(0, address_records[i])
+            city.insert(0, city_records[i])
+            state.insert(0, state_records[i])
+            zip_code.insert(0, zip_code_records[i])
+            phone.insert(0, phone_records[i])
+            email.insert(0, email_records[i])
+            grade_point.insert(0, gpa_records[i])
+            grade_level.insert(0, grade_level_records[i])
+
+
+
 
 
     def return_search_results():  # returns all results in separate frames
-        print("return search results button works")
+
         # Connect to DB
         conn = sqlite3.connect('SIS.db')
         # Create a cursor
@@ -150,98 +280,26 @@ def update_record_window():
 
         drop_menu = drop_menu_selection.get()
         if drop_menu == "First Name":
-
             cur.execute("SELECT *,oid FROM student_records WHERE f_name LIKE" + "'%" + query + "%'")
             results = cur.fetchall()
-            # I think this should be a function that all ifs can copy. populate_records?
-            oid_records = []
-            f_name_records = []
-            l_name_records = []
-            address_records = []
-            city_records = []
-            state_records = []
-            zip_code_records = []
-            phone_records = []
-            email_records = []
-            gpa_records = []
-            grade_level_records = []
+            populate_records(results)
+        elif drop_menu == "Last Name":
+            cur.execute("SELECT *,oid FROM student_records WHERE l_name LIKE" + "'%" + query + "%'")
+            results = cur.fetchall()
+            populate_records(results)
+        elif drop_menu == "Address":
+            cur.execute("SELECT *,oid FROM student_records WHERE address LIKE" + "'%" + query + "%'")
+            results = cur.fetchall()
+            populate_records(results)
+        elif drop_menu == "Email":
+            cur.execute("SELECT *,oid FROM student_records WHERE email LIKE" + "'%" + query + "%'")
+            results = cur.fetchall()
+            populate_records(results)
+        else:
+            cur.execute("SELECT *,oid FROM student_records WHERE grade_level LIKE" + "'%" + query + "%'")
+            results = cur.fetchall()
+            populate_records(results)
 
-            i = 0
-            for result in range(len(results)):
-                oid_records.append(str(results[i][12]))
-                f_name_records.append(str(results[i][0]))
-                l_name_records.append(str(results[i][1]))
-                address_records.append(str(results[i][2]))
-                city_records.append(str(results[i][3]))
-                state_records.append(str(results[i][4]))
-                zip_code_records.append(str(results[i][5]))
-                phone_records.append(str(results[i][6]) + str(results[i][7]) + str(results[i][8]))
-                email_records.append(str(results[i][9]))
-                gpa_records.append(str(results[i][10]))
-                grade_level_records.append(str(results[i][11]))
-                i += 1
-
-            for i in range(len(results)):
-
-                update_frame = Frame(top)
-                update_frame.grid(row=i+8, columnspan=20, sticky=NW)
-
-                f_name = Entry(update_frame, width=30)
-                f_name.grid(row=1, column=1, columnspan=10, sticky=W)
-                l_name = Entry(update_frame, width=30)
-                l_name.grid(row=1, column=12, columnspan=10, sticky=W)
-                address = Entry(update_frame, width=61)
-                address.grid(row=2, column=1, columnspan=40, sticky=W)
-                city = Entry(update_frame, width=30)
-                city.grid(row=3, column=1, columnspan=10, sticky=W)
-                state = Entry(update_frame, width=5)
-                state.grid(row=3, column=12, columnspan=2, sticky=W)
-                zip_code = Entry(update_frame, width=10)
-                zip_code.grid(row=3, column=15, columnspan=5, sticky=W)
-                phone = Entry(update_frame, width=3)
-                email = Entry(update_frame, width=30)
-                email.grid(row=5, column=1, sticky=W, columnspan=10)
-                grade_point = Entry(update_frame, width=5)
-                grade_point.grid(row=6, column=1, sticky=W)
-                grade_level = Entry(update_frame, width=5)
-                grade_level.grid(row=6, column=3, sticky=W)
-
-                # Textbox labels
-                f_name_label = Label(update_frame, text="First Name")
-                f_name_label.grid(row=1, column=0)
-                l_name_label = Label(update_frame, text="Last Name")
-                l_name_label.grid(row=1, column=11)
-                address_label = Label(update_frame, text="Street Address")
-                address_label.grid(row=2, column=0)
-                city_label = Label(update_frame, text="City")
-                city_label.grid(row=3, column=0)
-                state_label = Label(update_frame, text="State")
-                state_label.grid(row=3, column=11)
-                zip_code_label = Label(update_frame, text="Zip code")
-                zip_code_label.grid(row=3, column=14)
-                phone_label = Label(update_frame, text="Phone Number")
-                phone_label.grid(row=4, column=0)
-                email_label = Label(update_frame, text="Email")
-                email_label.grid(row=5, column=0)
-                grade_point_label = Label(update_frame, text="GPA")
-                grade_point_label.grid(row=6, column=0)
-                grade_level_label = Label(update_frame, text="Grade Level")
-                grade_level_label.grid(row=6, column=2)
-
-                update_button = Button(update_frame, text="Update", command= update_records)
-                delete_btn = Button(update_frame, text="Delete Record", command=delete_record_confirm)
-                delete_btn.grid(row=10, column=20)
-
-                f_name.insert(0, f_name_records[i])
-                l_name.insert(0, l_name_records[i])
-                address.insert(0, address_records[i])
-                city.insert(0, city_records[i])
-                state.insert(0, state_records[i])
-                zip_code.insert(0, zip_code_records[i])
-                phone.insert(0, phone_records[i])
-                email.insert(0, email_records[i])
-                grade_point.insert(0, gpa_records[i])
-                grade_level.insert(0, grade_level_records[i])
 
 
 
@@ -266,23 +324,7 @@ def update_record_window():
 
 
 
-    top = Tk()
-    top.title("Search Records")
 
-    # Create a frame
-    results_frame = Frame(top)
-    results_frame.grid(row=8, columnspan=20, sticky=NW)
-
-    # Create the search bar and buttons
-    drop_menu_selection = StringVar()
-    drop_menu_selection.set("Last Name")
-    search_by_label = Label(top, text="Search by: ")
-    search_by_label.grid(row=1, column=0, sticky=W)
-    drop_menu = OptionMenu(top, drop_menu_selection, "First Name", "Last Name", "Address", "Email", "Grade Level")
-    drop_menu.config(width=10)
-    drop_menu.grid(row=1, column=1, sticky=W)
-    search_bar = Entry(top, width=60)
-    search_bar.grid(row=1, column=2, columnspan=10, sticky=W)
 
     search_records = Button(top, text="Search Records", command=return_search_results)
     search_records.grid(row=1, column=15)
