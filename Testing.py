@@ -1,10 +1,12 @@
 from tkinter import *
 import sqlite3
-
+from functools import partial
 
 root = Tk()
 root.title("Student Information System")
 root.geometry("1280x720")
+
+global search_key
 
 # Create or Connect to a DB. As written, creates a new db stored in memory for each run.
 
@@ -136,14 +138,12 @@ def update_record_window():
     top = Tk()
     top.title("Update Records")
 
-
-
     # Create a frame
     master_frame = Frame(top)
     master_frame.grid(row=8, columnspan=20, sticky=NW)
-    scrollbar = Scrollbar(master_frame, orient=VERTICAL)
-    scrollbar.grid(row=0, column=50)
 
+    # scrollbar = Scrollbar(master_frame, orient=VERTICAL)
+    # scrollbar.grid(row=0, column=50, sticky=E)
 
     # Create the search bar and buttons
     drop_menu_selection = StringVar()
@@ -165,14 +165,8 @@ def update_record_window():
         master_frame = Frame(top)
         master_frame.grid(row=8, columnspan=20, sticky=NW)
 
-
-
-
-    def update_records():
-        pass
-
     def populate_records(results):
-
+        update_button_ids = []
         clear_update_frame(master_frame)
         oid_records = []
         f_name_records = []
@@ -181,10 +175,170 @@ def update_record_window():
         city_records = []
         state_records = []
         zip_code_records = []
-        phone_records = []
+        phone_area_records = []
+        phone_prefix_records = []
+        phone_line_records = []
         email_records = []
         gpa_records = []
         grade_level_records = []
+
+        def change_database(search_key):
+            pass
+
+            conn = sqlite3.connect('SIS.db')
+
+            # Create a cursor
+            cur = conn.cursor()
+            print("Search key = ", search_key)
+            #
+            # with conn:
+            #     cur.execute("""UPDATE student_records SET
+            #                 f_name = :f_name,
+            #                 l_name = :l_name,
+            #                 address = :address,
+            #                 city = :city,
+            #                 state = :state,
+            #                 zip_code = :zip_code,
+            #                 phone_area = :phone_area,
+            #                 phone_prefix = :phone_prefix,
+            #                 phone_line = :phone_line,
+            #                 email = :email,
+            #                 grade_point = :grade_point,
+            #                 grade_level = :grade_level
+            #
+            #                 WHERE oid= :oid""",
+            #                 {
+            #                     'f_name': updated_f_name,
+            #                     'l_name': updated_l_name,
+            #                     'address': updated_address,
+            #                     'city': updated_city,
+            #                     'state': updated_state,
+            #                     'zip_code': updated_zip_code,
+            #                     'phone_area': updated_phone_area,
+            #                     'phone_prefix': updated_phone_prefix,
+            #                     'phone_line': updated_phone_line,
+            #                     'email': updated_email,
+            #                     'grade_point': updated_grade_point,
+            #                     'grade_level': updated_grade_level,
+            #                     'oid': search_key
+            #
+            #                 })
+            #
+            # conn.commit()
+            # conn.close()
+            # # update_pop.destroy
+
+        def update_records(n):
+            clicked_button = (update_button_ids[n])
+            search_key = oid_dict.get(clicked_button)
+
+            def update_text():
+                updated_address = address_update.get()
+                print("Update_address.get() =", updated_address)
+
+
+
+            conn = sqlite3.connect('SIS.db')
+            # Create a cursor
+            cur = conn.cursor()
+
+            cur.execute("SELECT * FROM student_records WHERE oid =" + search_key)
+            update_results = cur.fetchall()
+
+            updated_f_name_records = update_results[0][0]
+            updated_l_name_records = update_results[0][1]
+            updated_address_records = "Old Text"
+            # updated_address_records = update_results[0][2]
+            updated_city_records = update_results[0][3]
+            updated_state_records = update_results[0][4]
+            updated_zip_code_records = update_results[0][5]
+            updated_phone_area_records = update_results[0][6]
+            updated_phone_prefix_records = update_results[0][7]
+            updated_phone_line_records = update_results[0][8]
+            updated_email_records = update_results[0][9]
+            updated_gpa_records = update_results[0][10]
+            updated_grade_level_records = update_results[0][11]
+
+            update_pop = Toplevel()
+            update_pop.title("Update Record")
+            address_update = StringVar()
+            f_name_update = Entry(update_pop, width=30)
+            f_name_update.grid(row=1, column=1, columnspan=10, sticky=W)
+            l_name_update = Entry(update_pop, width=30)
+            l_name_update.grid(row=1, column=13, columnspan=10, sticky=W)
+            address_update = Entry(update_pop, width=61, textvariable=updated_address)
+            address_update.grid(row=2, column=1, columnspan=40, sticky=W)
+            city_update = Entry(update_pop, width=30)
+            city_update.grid(row=3, column=1, columnspan=10, sticky=W)
+            state_update = Entry(update_pop, width=5)
+            state_update.grid(row=3, column=12, columnspan=2, sticky=W)
+            zip_code_update = Entry(update_pop, width=10)
+            zip_code_update.grid(row=3, column=15, columnspan=5, sticky=W)
+            phone_area_update = Entry(update_pop, width=3)
+            phone_area_update.grid(row=4, column=1)
+            phone_prefix_update = Entry(update_pop, width=3)
+            phone_prefix_update.grid(row=4, column=2)
+            phone_line_update = Entry(update_pop, width=4)
+            phone_line_update.grid(row=4, column=3)
+            email_update = Entry(update_pop, width=30)
+            email_update.grid(row=5, column=1, sticky=W, columnspan=10)
+            grade_point_update = Entry(update_pop, width=5)
+            grade_point_update.grid(row=6, column=1, sticky=W)
+            grade_level_update = Entry(update_pop, width=5)
+            grade_level_update.grid(row=6, column=3, sticky=W)
+
+            # Textbox labels
+            f_name_label = Label(update_pop, text="First Name")
+            f_name_label.grid(row=1, column=0)
+            l_name_label = Label(update_pop, text="Last Name")
+            l_name_label.grid(row=1, column=12)
+            address_label = Label(update_pop, text="Street Address")
+            address_label.grid(row=2, column=0)
+            city_label = Label(update_pop, text="City")
+            city_label.grid(row=3, column=0)
+            state_label = Label(update_pop, text="State")
+            state_label.grid(row=3, column=11)
+            zip_code_label = Label(update_pop, text="Zip code")
+            zip_code_label.grid(row=3, column=14)
+            phone_label = Label(update_pop, text="Phone Number")
+            phone_label.grid(row=4, column=0)
+            email_label = Label(update_pop, text="Email")
+            email_label.grid(row=5, column=0)
+            grade_point_label = Label(update_pop, text="GPA")
+            grade_point_label.grid(row=6, column=0)
+            grade_level_label = Label(update_pop, text="Grade Level")
+            grade_level_label.grid(row=6, column=2)
+
+            f_name_update.insert(0, updated_f_name_records)
+            l_name_update.insert(0, updated_l_name_records)
+            address_update.insert(0, updated_address_records)
+            # If this starts to work, will need to copy this for every var in this section
+            address_update.bind("<FocusIn>",
+                                lambda event: address_update.delete(0, "end") if address_update.get() ==
+                                                                                 updated_address_records else None)
+            address_update.bind("<FocusOut>", lambda event: address_update.insert(0,
+                                                                                  updated_address_records) if address_update == "" else None)
+            # address_update.bind("<FocusOut>",
+            #                     lambda event: address_update.get() if address_update.get() != updated_address_records else None)
+            city_update.insert(0, updated_city_records)
+            state_update.insert(0, updated_state_records)
+            zip_code_update.insert(0, updated_zip_code_records)
+            phone_area_update.insert(0, updated_phone_area_records)
+            phone_prefix_update.insert(0, updated_phone_prefix_records)
+            phone_line_update.insert(0, updated_phone_line_records)
+            email_update.insert(0, updated_email_records)
+            grade_point_update.insert(0, updated_gpa_records)
+            grade_level_update.insert(0, updated_grade_level_records)
+
+            print("Before confirm button, address-update.get=", address_update)
+            print("Before confirm button, updated_address = ", updated_address)
+
+            confirm_button = Button(update_pop, text="Save Changes", command=update_text())
+            confirm_button.grid(row=9, column=20)
+            cancel_button = Button(update_pop, text="Cancel", command=update_pop.destroy)
+            cancel_button.grid(row=9, column=21)
+
+            # return the value associated with the key update_button_ids[n]
 
         i = 0
         for result in range(len(results)):
@@ -195,7 +349,9 @@ def update_record_window():
             city_records.append(str(results[i][3]))
             state_records.append(str(results[i][4]))
             zip_code_records.append(str(results[i][5]))
-            phone_records.append(str(results[i][6]) + str(results[i][7]) + str(results[i][8]))
+            phone_area_records.append(str(results[i][6]))
+            phone_prefix_records.append(str(results[i][7]))
+            phone_line_records.append(str(results[i][8]))
             email_records.append(str(results[i][9]))
             gpa_records.append(str(results[i][10]))
             grade_level_records.append(str(results[i][11]))
@@ -203,27 +359,31 @@ def update_record_window():
 
         for i in range(len(results)):
             update_frame = Frame(master_frame, highlightbackground="black", highlightthickness=2)
-            update_frame.grid(row=i+8, columnspan=20, sticky=NW)
+            update_frame.grid(row=i + 8, columnspan=20, sticky=NW)
 
-
-            f_name = Entry(update_frame, width=30)
+            f_name = Label(update_frame, text=f_name_records[i])
             f_name.grid(row=1, column=3, columnspan=10, sticky=W)
-            l_name = Entry(update_frame, width=30)
+            l_name = Label(update_frame, text=l_name_records[i])
             l_name.grid(row=1, column=15, columnspan=10, sticky=W)
-            address = Entry(update_frame, width=61)
+            address = Label(update_frame, text=address_records[i])
             address.grid(row=2, column=1, columnspan=40, sticky=W)
-            city = Entry(update_frame, width=30)
+            city = Label(update_frame, text=city_records[i])
             city.grid(row=3, column=1, columnspan=10, sticky=W)
-            state = Entry(update_frame, width=5)
+            state = Label(update_frame, text=state_records[i])
             state.grid(row=3, column=12, columnspan=2, sticky=W)
-            zip_code = Entry(update_frame, width=10)
+            zip_code = Label(update_frame, text=zip_code_records[i])
             zip_code.grid(row=3, column=15, columnspan=5, sticky=W)
-            phone = Entry(update_frame, width=3)
-            email = Entry(update_frame, width=30)
+            phone_area = Label(update_frame, text=phone_area_records[i])
+            phone_area.grid(row=4, column=1)
+            phone_prefix = Label(update_frame, text=phone_prefix_records[i])
+            phone_prefix.grid(row=4, column=1)
+            phone_line = Label(update_frame, text=phone_line_records[i])
+            phone_line.grid(row=4, column=1)
+            email = Label(update_frame, text=email_records[i])
             email.grid(row=5, column=1, sticky=W, columnspan=10)
-            grade_point = Entry(update_frame, width=5)
+            grade_point = Label(update_frame, text=gpa_records[i])
             grade_point.grid(row=6, column=1, sticky=W)
-            grade_level = Entry(update_frame, width=5)
+            grade_level = Label(update_frame, text=grade_level_records[i])
             grade_level.grid(row=6, column=3, sticky=W)
 
             # Textbox labels
@@ -252,25 +412,16 @@ def update_record_window():
             oid = Label(update_frame, text=oid_records[i])
             oid.grid(row=1, column=1, sticky=W)
 
-            update_button = Button(update_frame, text="Update", command=update_records)
+            update_button = Button(update_frame, text="Update", command=partial(update_records, i))
             update_button.grid(row=9, column=20)
+            update_button_ids.append(update_button)
+            print(update_button_ids)
             delete_btn = Button(update_frame, text="Delete Record", command=delete_record_confirm)
             delete_btn.grid(row=10, column=20)
 
-            f_name.insert(0, f_name_records[i])
-            l_name.insert(0, l_name_records[i])
-            address.insert(0, address_records[i])
-            city.insert(0, city_records[i])
-            state.insert(0, state_records[i])
-            zip_code.insert(0, zip_code_records[i])
-            phone.insert(0, phone_records[i])
-            email.insert(0, email_records[i])
-            grade_point.insert(0, gpa_records[i])
-            grade_level.insert(0, grade_level_records[i])
-
-
-
-
+        print("oid_records = ", oid_records)
+        oid_dict = {update_button_ids[i]: oid_records[i] for i in range(len(results))}
+        print(oid_dict)
 
     def return_search_results():  # returns all results in separate frames
 
@@ -303,11 +454,6 @@ def update_record_window():
             results = cur.fetchall()
             populate_records(results)
 
-
-
-
-
-
     def delete_record():
         pass
 
@@ -324,10 +470,6 @@ def update_record_window():
         no_button.grid(row=0, column=1, columnspan=3)
         yes_button = Button(button_frame, text="Yes", command=delete_record)
         yes_button.grid(row=0, column=4, columnspan=3)
-
-
-
-
 
     search_records = Button(top, text="Search Records", command=return_search_results)
     search_records.grid(row=1, column=15)

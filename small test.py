@@ -193,7 +193,7 @@ def update_record_window():
                             phone_line_update,
                             email_update,
                             grade_point_update,
-                            grade_level_update):
+                            grade_level_update, changed_address):
 
             conn = sqlite3.connect('SIS.db')
 
@@ -214,6 +214,7 @@ def update_record_window():
             updated_grade_level = grade_level_update.get()
 
             print("address_update.get =", updated_address)
+            print("Changed address= ", changed_address)
             with conn:
                 cur.execute("""UPDATE student_records SET
                             f_name = :f_name,
@@ -255,15 +256,18 @@ def update_record_window():
             clicked_button = (update_button_ids[n])
             search_key = oid_dict.get(clicked_button)
 
+
             def update_pop_window():
                 update_pop = Toplevel()
                 update_pop.title("Update Record")
+                changed_address = StringVar()
+
 
                 f_name_update = Entry(update_pop, width=30)
                 f_name_update.grid(row=1, column=1, columnspan=10, sticky=W)
                 l_name_update = Entry(update_pop, width=30)
                 l_name_update.grid(row=1, column=13, columnspan=10, sticky=W)
-                address_update = Entry(update_pop, width=61)
+                address_update = Entry(update_pop, width=61, textvariable=changed_address)
                 address_update.grid(row=2, column=1, columnspan=40, sticky=W)
                 city_update = Entry(update_pop, width=30)
                 city_update.grid(row=3, column=1, columnspan=10, sticky=W)
@@ -312,8 +316,6 @@ def update_record_window():
                 # cur.execute("SELECT *,oid FROM student_records WHERE f_name= ?", (f_name_search_query,))
                 cur.execute("SELECT * FROM student_records WHERE oid =" + search_key)
                 update_results = cur.fetchall()
-                print("search key = ", search_key)
-                print("update results = ", update_results)
 
                 f_name_records = results[0][0]
                 l_name_records = results[0][1]
@@ -331,6 +333,12 @@ def update_record_window():
                 f_name_update.insert(0, f_name_records)
                 l_name_update.insert(0, l_name_records)
                 address_update.insert(0, address_records)
+                address_update.bind("<FocusIn>",
+                                    lambda event: address_update.delete(0, "end") if address_update.get() ==
+                                                                                     address_records else None)
+                address_update.bind("<FocusOut>", lambda event: address_update.insert(0,
+                                                                          address_records) if address_update.get() == "" else None)
+                address_update.bind("<FocusOut>", lambda event: address_update.get() if address_update.get() != address_records else None)
                 city_update.insert(0, city_records)
                 state_update.insert(0, state_records)
                 zip_code_update.insert(0, zip_code_records)
@@ -340,6 +348,10 @@ def update_record_window():
                 email_update.insert(0, email_records)
                 grade_point_update.insert(0, gpa_records)
                 grade_level_update.insert(0, grade_level_records)
+
+                changed_address = address_update.get()
+                print("before clicking save changes, address_update.get =", address_update.get())
+                print("before clicking save changes, changed_address= ", changed_address)
 
                 confirm_button = Button(update_pop, text="Save Changes", command=change_database(search_key,
                                                                                                  f_name_update,
@@ -353,7 +365,7 @@ def update_record_window():
                                                                                                  phone_line_update,
                                                                                                  email_update,
                                                                                                  grade_point_update,
-                                                                                                 grade_level_update))
+                                                                                                 grade_level_update, changed_address))
                 confirm_button.grid(row=9, column=20)
                 cancel_button = Button(update_pop, text="Cancel", command=update_pop.destroy)
                 cancel_button.grid(row=9, column=21)
