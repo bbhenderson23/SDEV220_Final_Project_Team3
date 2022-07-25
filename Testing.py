@@ -262,6 +262,7 @@ def update_record_window():
             update_pop = Toplevel()
             update_pop.title("Update Record")
             address_update = StringVar()
+            updated_address = StringVar()
             f_name_update = Entry(update_pop, width=30)
             f_name_update.grid(row=1, column=1, columnspan=10, sticky=W)
             l_name_update = Entry(update_pop, width=30)
