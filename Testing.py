@@ -83,7 +83,7 @@ def create_record_window():
     phone_label.grid(row=4, column=0)
     email_label = Label(top, text="Email")
     email_label.grid(row=5, column=0)
-    grade_point_label = Label(top, text="GPA")
+    grade_point_label = Label(top, text="grade_point")
     grade_point_label.grid(row=6, column=0)
     grade_level_label = Label(top, text="Grade Level")
     grade_level_label.grid(row=6, column=2)
@@ -179,53 +179,74 @@ def update_record_window():
         phone_prefix_records = []
         phone_line_records = []
         email_records = []
-        gpa_records = []
+        grade_point_records = []
         grade_level_records = []
 
-        def change_database(search_key):
-            pass
+        def change_database(search_key, updated_f_name,
+
+                            updated_l_name,
+                            updated_address,
+
+                            updated_city,
+
+                            updated_state,
+
+                            updated_zip_code,
+
+                            updated_phone_area,
+
+                            updated_phone_prefix,
+
+                            updated_phone_line,
+
+                            updated_email,
+
+                            updated_grade_point,
+
+                            updated_grade_level,
+                            ):
 
             conn = sqlite3.connect('SIS.db')
 
             # Create a cursor
             cur = conn.cursor()
             print("Search key = ", search_key)
-            #
-            # with conn:
-            #     cur.execute("""UPDATE student_records SET
-            #                 f_name = :f_name,
-            #                 l_name = :l_name,
-            #                 address = :address,
-            #                 city = :city,
-            #                 state = :state,
-            #                 zip_code = :zip_code,
-            #                 phone_area = :phone_area,
-            #                 phone_prefix = :phone_prefix,
-            #                 phone_line = :phone_line,
-            #                 email = :email,
-            #                 grade_point = :grade_point,
-            #                 grade_level = :grade_level
-            #
-            #                 WHERE oid= :oid""",
-            #                 {
-            #                     'f_name': updated_f_name,
-            #                     'l_name': updated_l_name,
-            #                     'address': updated_address,
-            #                     'city': updated_city,
-            #                     'state': updated_state,
-            #                     'zip_code': updated_zip_code,
-            #                     'phone_area': updated_phone_area,
-            #                     'phone_prefix': updated_phone_prefix,
-            #                     'phone_line': updated_phone_line,
-            #                     'email': updated_email,
-            #                     'grade_point': updated_grade_point,
-            #                     'grade_level': updated_grade_level,
-            #                     'oid': search_key
-            #
-            #                 })
-            #
-            # conn.commit()
-            # conn.close()
+
+            with conn:
+                cur.execute("""UPDATE student_records SET
+                            f_name = :f_name,
+                            l_name = :l_name,
+                            address = :address,
+                            city = :city,
+                            state = :state,
+                            zip_code = :zip_code,
+                            phone_area = :phone_area,
+                            phone_prefix = :phone_prefix,
+                            phone_line = :phone_line,
+                            email = :email,
+                            grade_point = :grade_point,
+                            grade_level = :grade_level
+
+                            WHERE oid= :oid""",
+                            {
+                                'f_name': updated_f_name,
+                                'l_name': updated_l_name,
+                                'address': updated_address,
+                                'city': updated_city,
+                                'state': updated_state,
+                                'zip_code': updated_zip_code,
+                                'phone_area': updated_phone_area,
+                                'phone_prefix': updated_phone_prefix,
+                                'phone_line': updated_phone_line,
+                                'email': updated_email,
+                                'grade_point': updated_grade_point,
+                                'grade_level': updated_grade_level,
+                                'oid': search_key
+
+                            })
+
+            conn.commit()
+            conn.close()
             # # update_pop.destroy
 
         def update_records(n):
@@ -233,10 +254,40 @@ def update_record_window():
             search_key = oid_dict.get(clicked_button)
 
             def update_text():
+                # Will need this for all vars
+
+                updated_f_name = f_name_update.get()
+                updated_l_name = l_name_update.get()
                 updated_address = address_update.get()
+                updated_city = city_update.get()
+                updated_state = state_update.get()
+                updated_zip_code = zip_code_update.get()
+                updated_phone_area = phone_area_update.get()
+                updated_phone_prefix = phone_prefix_update.get()
+                updated_phone_line = phone_line_update.get()
+                updated_email = email_update.get()
+                updated_grade_point = grade_point_update.get()
+                updated_grade_level = grade_level_update.get()
+                print("Update_address.get() =", updated_f_name)
+                print("Update_address.get() =", updated_l_name)
+                print("Update_address.get() =", updated_address)
+                print("Update_address.get() =", updated_city)
+                print("Update_address.get() =", updated_state)
+                print("Update_address.get() =", updated_zip_code)
                 print("Update_address.get() =", updated_address)
 
-
+                change_database(search_key, updated_f_name,
+                                updated_l_name,
+                                updated_address,
+                                updated_city,
+                                updated_state,
+                                updated_zip_code,
+                                updated_phone_area,
+                                updated_phone_prefix,
+                                updated_phone_line,
+                                updated_email,
+                                updated_grade_point,
+                                updated_grade_level)
 
             conn = sqlite3.connect('SIS.db')
             # Create a cursor
@@ -247,8 +298,7 @@ def update_record_window():
 
             updated_f_name_records = update_results[0][0]
             updated_l_name_records = update_results[0][1]
-            updated_address_records = "Old Text"
-            # updated_address_records = update_results[0][2]
+            updated_address_records = update_results[0][2]
             updated_city_records = update_results[0][3]
             updated_state_records = update_results[0][4]
             updated_zip_code_records = update_results[0][5]
@@ -256,7 +306,7 @@ def update_record_window():
             updated_phone_prefix_records = update_results[0][7]
             updated_phone_line_records = update_results[0][8]
             updated_email_records = update_results[0][9]
-            updated_gpa_records = update_results[0][10]
+            updated_grade_point_records = update_results[0][10]
             updated_grade_level_records = update_results[0][11]
 
             update_pop = Toplevel()
@@ -305,36 +355,122 @@ def update_record_window():
             phone_label.grid(row=4, column=0)
             email_label = Label(update_pop, text="Email")
             email_label.grid(row=5, column=0)
-            grade_point_label = Label(update_pop, text="GPA")
+            grade_point_label = Label(update_pop, text="grade_point")
             grade_point_label.grid(row=6, column=0)
             grade_level_label = Label(update_pop, text="Grade Level")
             grade_level_label.grid(row=6, column=2)
 
             f_name_update.insert(0, updated_f_name_records)
+            f_name_update.bind("<FocusIn>",
+                               lambda event: f_name_update.delete(0, "end") if f_name_update.get() ==
+                                                                               updated_f_name_records else None)
+            f_name_update.bind("<FocusOut>", lambda event: f_name_update.insert(0,
+                                                                                updated_f_name_records) if f_name_update == "" else None)
+            f_name_update.bind("<FocusOut>",
+                               lambda
+                                   event: f_name_update.get() if f_name_update.get() != updated_f_name_records else None)
             l_name_update.insert(0, updated_l_name_records)
+            l_name_update.bind("<FocusIn>",
+                               lambda event: l_name_update.delete(0, "end") if l_name_update.get() ==
+                                                                               updated_l_name_records else None)
+            l_name_update.bind("<FocusOut>", lambda event: l_name_update.insert(0,
+                                                                                updated_l_name_records) if l_name_update == "" else None)
+            l_name_update.bind("<FocusOut>",
+                               lambda
+                                   event: l_name_update.get() if l_name_update.get() != updated_l_name_records else None)
             address_update.insert(0, updated_address_records)
-            # If this starts to work, will need to copy this for every var in this section
+
             address_update.bind("<FocusIn>",
                                 lambda event: address_update.delete(0, "end") if address_update.get() ==
                                                                                  updated_address_records else None)
             address_update.bind("<FocusOut>", lambda event: address_update.insert(0,
                                                                                   updated_address_records) if address_update == "" else None)
-            # address_update.bind("<FocusOut>",
-            #                     lambda event: address_update.get() if address_update.get() != updated_address_records else None)
+            address_update.bind("<FocusOut>",
+                                lambda
+                                    event: address_update.get() if address_update.get() != updated_address_records else None)
             city_update.insert(0, updated_city_records)
+            city_update.bind("<FocusIn>",
+                             lambda event: city_update.delete(0, "end") if city_update.get() ==
+                                                                           updated_city_records else None)
+            city_update.bind("<FocusOut>", lambda event: city_update.insert(0,
+                                                                            updated_city_records) if city_update == "" else None)
+            city_update.bind("<FocusOut>",
+                             lambda
+                                 event: city_update.get() if city_update.get() != updated_city_records else None)
             state_update.insert(0, updated_state_records)
+            state_update.bind("<FocusIn>",
+                              lambda event: state_update.delete(0, "end") if state_update.get() ==
+                                                                             updated_state_records else None)
+            state_update.bind("<FocusOut>", lambda event: state_update.insert(0,
+                                                                              updated_state_records) if state_update == "" else None)
+            state_update.bind("<FocusOut>",
+                              lambda
+                                  event: state_update.get() if state_update.get() != updated_state_records else None)
             zip_code_update.insert(0, updated_zip_code_records)
+            zip_code_update.bind("<FocusIn>",
+                                 lambda event: zip_code_update.delete(0, "end") if zip_code_update.get() ==
+                                                                                   updated_zip_code_records else None)
+            zip_code_update.bind("<FocusOut>", lambda event: zip_code_update.insert(0,
+                                                                                    updated_zip_code_records) if zip_code_update == "" else None)
+            zip_code_update.bind("<FocusOut>",
+                                 lambda
+                                     event: zip_code_update.get() if zip_code_update.get() != updated_zip_code_records else None)
             phone_area_update.insert(0, updated_phone_area_records)
+            phone_area_update.bind("<FocusIn>",
+                                   lambda event: phone_area_update.delete(0, "end") if phone_area_update.get() ==
+                                                                                       updated_phone_area_records else None)
+            phone_area_update.bind("<FocusOut>", lambda event: phone_area_update.insert(0,
+                                                                                        updated_phone_area_records) if phone_area_update == "" else None)
+            phone_area_update.bind("<FocusOut>",
+                                   lambda
+                                       event: phone_area_update.get() if phone_area_update.get() != updated_phone_area_records else None)
             phone_prefix_update.insert(0, updated_phone_prefix_records)
+            phone_prefix_update.bind("<FocusIn>",
+                                     lambda event: phone_prefix_update.delete(0, "end") if phone_prefix_update.get() ==
+                                                                                           updated_phone_prefix_records else None)
+            phone_prefix_update.bind("<FocusOut>", lambda event: phone_prefix_update.insert(0,
+                                                                                            updated_phone_prefix_records) if phone_prefix_update == "" else None)
+            phone_prefix_update.bind("<FocusOut>",
+                                     lambda
+                                         event: phone_prefix_update.get() if phone_prefix_update.get() != updated_phone_prefix_records else None)
             phone_line_update.insert(0, updated_phone_line_records)
+            phone_line_update.bind("<FocusIn>",
+                                   lambda event: phone_line_update.delete(0, "end") if phone_line_update.get() ==
+                                                                                       updated_phone_line_records else None)
+            phone_line_update.bind("<FocusOut>", lambda event: phone_line_update.insert(0,
+                                                                                        updated_phone_line_records) if phone_line_update == "" else None)
+            phone_line_update.bind("<FocusOut>",
+                                   lambda
+                                       event: phone_line_update.get() if phone_line_update.get() != updated_phone_line_records else None)
             email_update.insert(0, updated_email_records)
-            grade_point_update.insert(0, updated_gpa_records)
+            email_update.bind("<FocusIn>",
+                              lambda event: email_update.delete(0, "end") if email_update.get() ==
+                                                                             updated_email_records else None)
+            email_update.bind("<FocusOut>", lambda event: email_update.insert(0,
+                                                                              updated_email_records) if email_update == "" else None)
+            email_update.bind("<FocusOut>",
+                              lambda
+                                  event: email_update.get() if email_update.get() != updated_email_records else None)
+            grade_point_update.insert(0, updated_grade_point_records)
+            grade_point_update.bind("<FocusIn>",
+                                    lambda event: grade_point_update.delete(0, "end") if grade_point_update.get() ==
+                                                                                         updated_grade_point_records else None)
+            grade_point_update.bind("<FocusOut>", lambda event: grade_point_update.insert(0,
+                                                                                          updated_grade_point_records) if grade_point_update == "" else None)
+            grade_point_update.bind("<FocusOut>",
+                                    lambda
+                                        event: grade_point_update.get() if grade_point_update.get() != updated_grade_point_records else None)
             grade_level_update.insert(0, updated_grade_level_records)
+            grade_level_update.bind("<FocusIn>",
+                                    lambda event: grade_level_update.delete(0, "end") if grade_level_update.get() ==
+                                                                                         updated_grade_level_records else None)
+            grade_level_update.bind("<FocusOut>", lambda event: grade_level_update.insert(0,
+                                                                                          updated_grade_level_records) if grade_level_update == "" else None)
+            grade_level_update.bind("<FocusOut>",
+                                    lambda
+                                        event: grade_level_update.get() if grade_level_update.get() != updated_grade_level_records else None)
 
-            print("Before confirm button, address-update.get=", address_update)
-            print("Before confirm button, updated_address = ", updated_address)
-
-            confirm_button = Button(update_pop, text="Save Changes", command=update_text())
+            confirm_button = Button(update_pop, text="Save Changes", command=update_text)
             confirm_button.grid(row=9, column=20)
             cancel_button = Button(update_pop, text="Cancel", command=update_pop.destroy)
             cancel_button.grid(row=9, column=21)
@@ -354,7 +490,7 @@ def update_record_window():
             phone_prefix_records.append(str(results[i][7]))
             phone_line_records.append(str(results[i][8]))
             email_records.append(str(results[i][9]))
-            gpa_records.append(str(results[i][10]))
+            grade_point_records.append(str(results[i][10]))
             grade_level_records.append(str(results[i][11]))
             i += 1
 
@@ -382,7 +518,7 @@ def update_record_window():
             phone_line.grid(row=4, column=1)
             email = Label(update_frame, text=email_records[i])
             email.grid(row=5, column=1, sticky=W, columnspan=10)
-            grade_point = Label(update_frame, text=gpa_records[i])
+            grade_point = Label(update_frame, text=grade_point_records[i])
             grade_point.grid(row=6, column=1, sticky=W)
             grade_level = Label(update_frame, text=grade_level_records[i])
             grade_level.grid(row=6, column=3, sticky=W)
@@ -502,8 +638,8 @@ def search_record_window():
         phone_head.grid(row=2, column=7, sticky=W, padx=10)
         email_head = Label(results_frame, text="Email")
         email_head.grid(row=2, column=8, sticky=W, padx=10)
-        gpa_head = Label(results_frame, text="GPA")
-        gpa_head.grid(row=2, column=9, sticky=W, padx=10)
+        grade_point_head = Label(results_frame, text="grade_point")
+        grade_point_head.grid(row=2, column=9, sticky=W, padx=10)
         grade_level_head = Label(results_frame, text="Grade Level")
         grade_level_head.grid(row=2, column=10, sticky=W, padx=10)
 
@@ -518,7 +654,7 @@ def search_record_window():
         clear_frame()
 
         def create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records,
-                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records):
+                           zip_code_records, phone_records, email_records, grade_point_records, grade_level_records):
             create_headers()
 
             # Creates a list of results
@@ -541,8 +677,8 @@ def search_record_window():
             phone_results_label.grid(row=4, column=7)
             email_results_label = Label(results_frame, text=email_records)
             email_results_label.grid(row=4, column=8)
-            gpa_results_label = Label(results_frame, text=gpa_records)
-            gpa_results_label.grid(row=4, column=9)
+            grade_point_results_label = Label(results_frame, text=grade_point_records)
+            grade_point_results_label.grid(row=4, column=9)
             grade_level_results_label = Label(results_frame, text=grade_level_records)
             grade_level_results_label.grid(row=4, column=10)
 
@@ -567,7 +703,7 @@ def search_record_window():
             zip_code_records = ''
             phone_records = ''
             email_records = ''
-            gpa_records = ''
+            grade_point_records = ''
             grade_level_records = ''
 
             for result in f_name_results:
@@ -580,11 +716,11 @@ def search_record_window():
                 zip_code_records += str(result[5]) + "\n"
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
                 email_records += str(result[9]) + "\n"
-                gpa_records += str(result[10]) + "\n"
+                grade_point_records += str(result[10]) + "\n"
                 grade_level_records += str(result[11]) + "\n"
 
             create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records,
-                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
+                           zip_code_records, phone_records, email_records, grade_point_records, grade_level_records)
 
         def l_name_search():
             # Connect to DB
@@ -605,7 +741,7 @@ def search_record_window():
             zip_code_records = ''
             phone_records = ''
             email_records = ''
-            gpa_records = ''
+            grade_point_records = ''
             grade_level_records = ''
 
             for result in l_name_results:
@@ -618,11 +754,11 @@ def search_record_window():
                 zip_code_records += str(result[5]) + "\n"
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
                 email_records += str(result[9]) + "\n"
-                gpa_records += str(result[10]) + "\n"
+                grade_point_records += str(result[10]) + "\n"
                 grade_level_records += str(result[11]) + "\n"
 
             create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records,
-                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
+                           zip_code_records, phone_records, email_records, grade_point_records, grade_level_records)
 
         def address_search():
             # Connect to DB
@@ -643,7 +779,7 @@ def search_record_window():
             zip_code_records = ''
             phone_records = ''
             email_records = ''
-            gpa_records = ''
+            grade_point_records = ''
             grade_level_records = ''
 
             for result in address_results:
@@ -656,11 +792,11 @@ def search_record_window():
                 zip_code_records += str(result[5]) + "\n"
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
                 email_records += str(result[9]) + "\n"
-                gpa_records += str(result[10]) + "\n"
+                grade_point_records += str(result[10]) + "\n"
                 grade_level_records += str(result[11]) + "\n"
 
                 create_results(oid_records, f_name_records, l_name_records, address_records, city_records,
-                               state_records, zip_code_records, phone_records, email_records, gpa_records,
+                               state_records, zip_code_records, phone_records, email_records, grade_point_records,
                                grade_level_records)
 
         def email_search():
@@ -682,7 +818,7 @@ def search_record_window():
             zip_code_records = ''
             phone_records = ''
             email_records = ''
-            gpa_records = ''
+            grade_point_records = ''
             grade_level_records = ''
 
             for result in email_results:
@@ -695,11 +831,11 @@ def search_record_window():
                 zip_code_records += str(result[5]) + "\n"
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
                 email_records += str(result[9]) + "\n"
-                gpa_records += str(result[10]) + "\n"
+                grade_point_records += str(result[10]) + "\n"
                 grade_level_records += str(result[11]) + "\n"
 
             create_results(oid_records, f_name_records, l_name_records, address_records, city_records, state_records,
-                           zip_code_records, phone_records, email_records, gpa_records, grade_level_records)
+                           zip_code_records, phone_records, email_records, grade_point_records, grade_level_records)
 
         def grade_level_search():
             # Connect to DB
@@ -721,7 +857,7 @@ def search_record_window():
             zip_code_records = ''
             phone_records = ''
             email_records = ''
-            gpa_records = ''
+            grade_point_records = ''
             grade_level_records = ''
 
             for result in grade_level_results:
@@ -734,11 +870,11 @@ def search_record_window():
                 zip_code_records += str(result[5]) + "\n"
                 phone_records += str(result[6]) + str(result[7]) + str(result[8]) + "\n"
                 email_records += str(result[9]) + "\n"
-                gpa_records += str(result[10]) + "\n"
+                grade_point_records += str(result[10]) + "\n"
                 grade_level_records += str(result[11]) + "\n"
 
                 create_results(oid_records, f_name_records, l_name_records, address_records, city_records,
-                               state_records, zip_code_records, phone_records, email_records, gpa_records,
+                               state_records, zip_code_records, phone_records, email_records, grade_point_records,
                                grade_level_records)
 
         drop_menu = drop_menu_selection.get()
