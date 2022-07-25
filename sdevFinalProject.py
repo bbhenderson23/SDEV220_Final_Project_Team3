@@ -6,7 +6,8 @@ root = Tk()
 root.title("Student Information System")
 root.geometry("1280x720")
 
-global search_key
+# global search_key
+global confirm
 
 # Create or Connect to a DB. As written, creates a new db stored in memory for each run.
 
@@ -83,7 +84,7 @@ def create_record_window():
     phone_label.grid(row=4, column=0)
     email_label = Label(top, text="Email")
     email_label.grid(row=5, column=0)
-    grade_point_label = Label(top, text="grade_point")
+    grade_point_label = Label(top, text="GPA")
     grade_point_label.grid(row=6, column=0)
     grade_level_label = Label(top, text="Grade Level")
     grade_level_label.grid(row=6, column=2)
@@ -131,6 +132,8 @@ def create_record_window():
     # Submit Button
     submit_button = Button(top, text="Add Record to Database", command=submit)
     submit_button.grid(row=8, column=14, columnspan=3)
+    cancel_button = Button(top, text="Cancel", command=top.destroy)
+    cancel_button.grid(row=9, column=14, columnspan=3)
 
 
 def update_record_window():
@@ -167,6 +170,7 @@ def update_record_window():
 
     def populate_records(results):
         update_button_ids = []
+        delete_button_ids = []
         clear_update_frame(master_frame)
         oid_records = []
         f_name_records = []
@@ -183,28 +187,17 @@ def update_record_window():
         grade_level_records = []
 
         def change_database(search_key, updated_f_name,
-
                             updated_l_name,
                             updated_address,
-
                             updated_city,
-
                             updated_state,
-
                             updated_zip_code,
-
                             updated_phone_area,
-
                             updated_phone_prefix,
-
                             updated_phone_line,
-
                             updated_email,
-
                             updated_grade_point,
-
-                            updated_grade_level,
-                            ):
+                            updated_grade_level,):
 
             conn = sqlite3.connect('SIS.db')
 
@@ -247,7 +240,51 @@ def update_record_window():
 
             conn.commit()
             conn.close()
-            # # update_pop.destroy
+            return_search_results()
+
+
+
+
+        def delete_record(n):
+
+            def delete_record_confirm():
+                confirm = Tk()
+                confirm.title("Delete Confirmation")
+                confirm_label = Label(confirm, text="""This will permanently delete this record.
+                \n This cannot be undone. \n Are you sure you want to delete the record?""")
+                confirm_label.grid(row=2, rowspan=10, column=0, columnspan=6)
+
+                button_frame = Frame(confirm)
+                button_frame.grid(row=20, columnspan=6)
+                no_button = Button(button_frame, text="No", command=confirm.destroy)
+                no_button.grid(row=0, column=1, columnspan=3)
+                yes_button = Button(button_frame, text="Yes", command=partial(delete_from_db, n, confirm))
+                yes_button.grid(row=0, column=4, columnspan=3)
+                return confirm
+
+            def delete_from_db(n, confirm):
+                confirm.destroy()
+                clicked_button = (delete_button_ids[n])
+                delete_search_key = delete_oid_dict.get(clicked_button)
+                print("delete_search_key =", delete_search_key)
+
+                conn = sqlite3.connect('SIS.db')
+
+                # Create a cursor
+                cur = conn.cursor()
+                print("Delete Search key = ", delete_search_key)
+
+                with conn:
+                    cur.execute("DELETE from student_records WHERE oid=:oid",
+                                {'oid': delete_search_key})
+
+                conn.commit()
+                conn.close()
+                return_search_results()
+
+            delete_record_confirm()
+
+
 
         def update_records(n):
             clicked_button = (update_button_ids[n])
@@ -268,13 +305,7 @@ def update_record_window():
                 updated_email = email_update.get()
                 updated_grade_point = grade_point_update.get()
                 updated_grade_level = grade_level_update.get()
-                print("Update_address.get() =", updated_f_name)
-                print("Update_address.get() =", updated_l_name)
-                print("Update_address.get() =", updated_address)
-                print("Update_address.get() =", updated_city)
-                print("Update_address.get() =", updated_state)
-                print("Update_address.get() =", updated_zip_code)
-                print("Update_address.get() =", updated_address)
+
 
                 change_database(search_key, updated_f_name,
                                 updated_l_name,
@@ -288,6 +319,8 @@ def update_record_window():
                                 updated_email,
                                 updated_grade_point,
                                 updated_grade_level)
+
+                update_pop.destroy()
 
             conn = sqlite3.connect('SIS.db')
             # Create a cursor
@@ -355,7 +388,7 @@ def update_record_window():
             phone_label.grid(row=4, column=0)
             email_label = Label(update_pop, text="Email")
             email_label.grid(row=5, column=0)
-            grade_point_label = Label(update_pop, text="grade_point")
+            grade_point_label = Label(update_pop, text="GPA")
             grade_point_label.grid(row=6, column=0)
             grade_level_label = Label(update_pop, text="Grade Level")
             grade_level_label.grid(row=6, column=2)
@@ -475,7 +508,7 @@ def update_record_window():
             cancel_button = Button(update_pop, text="Cancel", command=update_pop.destroy)
             cancel_button.grid(row=9, column=21)
 
-            # return the value associated with the key update_button_ids[n]
+
 
         i = 0
         for result in range(len(results)):
@@ -552,13 +585,19 @@ def update_record_window():
             update_button = Button(update_frame, text="Update", command=partial(update_records, i))
             update_button.grid(row=9, column=20)
             update_button_ids.append(update_button)
-            print(update_button_ids)
-            delete_btn = Button(update_frame, text="Delete Record", command=delete_record_confirm)
-            delete_btn.grid(row=10, column=20)
+
+            delete_button = Button(update_frame, text="Delete Record", command=partial(delete_record, i))
+            delete_button.grid(row=10, column=20)
+            delete_button_ids.append(delete_button)
+
+
+
 
         print("oid_records = ", oid_records)
         oid_dict = {update_button_ids[i]: oid_records[i] for i in range(len(results))}
+        delete_oid_dict = {delete_button_ids[i]: oid_records[i] for i in range(len(results))}
         print(oid_dict)
+        print(delete_oid_dict)
 
     def return_search_results():  # returns all results in separate frames
 
@@ -591,22 +630,9 @@ def update_record_window():
             results = cur.fetchall()
             populate_records(results)
 
-    def delete_record():
-        pass
 
-    def delete_record_confirm():
-        confirm = Tk()
-        confirm.title("Delete Confirmation")
-        confirm_label = Label(confirm, text="""This will permanently delete this record.
-        \n This cannot be undone. \n Are you sure you want to delete the record?""")
-        confirm_label.grid(row=2, rowspan=10, column=0, columnspan=6)
 
-        button_frame = Frame(confirm)
-        button_frame.grid(row=20, columnspan=6)
-        no_button = Button(button_frame, text="No", command=confirm.destroy)
-        no_button.grid(row=0, column=1, columnspan=3)
-        yes_button = Button(button_frame, text="Yes", command=delete_record)
-        yes_button.grid(row=0, column=4, columnspan=3)
+
 
     search_records = Button(top, text="Search Records", command=return_search_results)
     search_records.grid(row=1, column=15)
@@ -638,7 +664,7 @@ def search_record_window():
         phone_head.grid(row=2, column=7, sticky=W, padx=10)
         email_head = Label(results_frame, text="Email")
         email_head.grid(row=2, column=8, sticky=W, padx=10)
-        grade_point_head = Label(results_frame, text="grade_point")
+        grade_point_head = Label(results_frame, text="GPA")
         grade_point_head.grid(row=2, column=9, sticky=W, padx=10)
         grade_level_head = Label(results_frame, text="Grade Level")
         grade_level_head.grid(row=2, column=10, sticky=W, padx=10)
